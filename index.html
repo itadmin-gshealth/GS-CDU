@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>CDU Attendance Register</title>
+<title>Student Attendance Register</title>
 
 <style>
 *{
@@ -218,12 +218,22 @@ input[type=time]{
     color:#1565C0;
 }
 
-.lunch-time{
-    background:#fff3cd;
-    color:#856404;
+.break-time{
+    background:#e8f5e9;
+    color:#2e7d32;
+}
+
+.break{
+    background:#e8f5e9;
+    color:#2e7d32;
     padding:14px;
     font-weight:bold;
     text-align:center;
+}
+
+.lunch-time{
+    background:#fff3cd;
+    color:#856404;
 }
 
 .lunch{
@@ -231,6 +241,34 @@ input[type=time]{
     color:#856404;
     padding:14px;
     font-weight:bold;
+    text-align:center;
+}
+.student-break{
+    background:#e8f5e9;
+    color:#2e7d32;
+    padding:10px;
+    margin:10px 0;
+    border-radius:8px;
+    text-align:center;
+    font-weight:bold;
+}
+
+.student-break small{
+    font-weight:normal;
+}
+
+.student-lunch{
+    background:#fff3cd;
+    color:#856404;
+    padding:10px;
+    margin:10px 0;
+    border-radius:8px;
+    text-align:center;
+    font-weight:bold;
+}
+
+.student-lunch small{
+    font-weight:normal;
 }
 
 /* HIDDEN */
@@ -339,7 +377,7 @@ Logout
 </div>
 
 
-<h1>CDU Attendance Register</h1>
+<h1>Student Attendance Register</h1>
 
 
 <!-- DATE -->
@@ -411,81 +449,100 @@ Open School
 
 <div class="card">
 
-<div class="timetable">
+    <h3 style="color:#1565C0;">
+        Open School Daily Timetable
+    </h3>
 
-<div class="time">
-9:00 – 10:00
+    <div class="timetable">
+
+        <!-- PERIOD 1 -->
+        <div class="time">
+            9:00 – 10:00
+        </div>
+
+        <div class="lesson">
+            <b>English</b><br>
+            Joy Emmanuel
+        </div>
+
+
+        <!-- PERIOD 2 -->
+        <div class="time">
+            10:00 – 11:00
+        </div>
+
+        <div class="lesson">
+            <b>Maths</b><br>
+            Satyabamma
+        </div>
+
+
+        <!-- RECESS -->
+        <div class="time break-time">
+            11:00 – 11:15
+        </div>
+
+        <div class="break">
+            ☕ RECESS BREAK
+        </div>
+
+
+        <!-- PERIOD 3 -->
+        <div class="time">
+            11:15 – 12:15
+        </div>
+
+        <div class="lesson">
+            <b>Social Science</b><br>
+            Sujatha
+        </div>
+
+
+        <!-- LUNCH -->
+        <div class="time lunch-time">
+            12:15 – 1:00
+        </div>
+
+        <div class="lunch">
+            🍱 LUNCH BREAK
+        </div>
+
+
+        <!-- PERIOD 4 -->
+        <div class="time">
+            1:00 – 2:00
+        </div>
+
+        <div class="lesson">
+            <b>Telugu</b><br>
+            Helen
+        </div>
+
+
+        <!-- PERIOD 5 -->
+        <div class="time">
+            2:00 – 3:00
+        </div>
+
+        <div class="lesson">
+            <b>Science</b><br>
+            Sheela
+        </div>
+
+
+        <!-- PERIOD 6 -->
+        <div class="time">
+            3:00 – 4:00
+        </div>
+
+        <div class="lesson">
+            <b>IT (Optional)</b><br>
+            Sathia
+        </div>
+
+    </div>
+
 </div>
-
-<div class="lesson">
-<b>English</b><br>
-Joy Emmanuel
-</div>
-
-
-<div class="time">
-10:00 – 11:00
-</div>
-
-<div class="lesson">
-<b>Maths</b><br>
-Satyabamma
-</div>
-
-
-<div class="time">
-11:00 – 12:00
-</div>
-
-<div class="lesson">
-<b>Social Science</b><br>
-Sujatha
-</div>
-
-
-<div class="time">
-12:00 – 1:00
-</div>
-
-<div class="lesson">
-<b>Telugu</b><br>
-Helen
-</div>
-
-
-<div class="time lunch-time">
-1:00 – 2:00
-</div>
-
-<div class="lunch">
-🍱 LUNCH BREAK
-</div>
-
-
-<div class="time">
-2:00 – 3:00
-</div>
-
-<div class="lesson">
-<b>Science</b><br>
-Sheela
-</div>
-
-
-<div class="time">
-3:00 – 4:00
-</div>
-
-<div class="lesson">
-<b>IT (Optional)</b><br>
-Sathia
-</div>
-
-</div>
-
-</div>
-
-
 <h2>Open School Attendance</h2>
 
 <div id="schoolStudents"></div>
@@ -557,17 +614,17 @@ const therapySubjects = [
 
 const schoolSubjects = [
 
-["ENG","English","Joy Emmanuel","09:00","10:00"],
+    ["ENG", "English", "Joy Emmanuel", "09:00", "10:00"],
 
-["MAT","Maths","Satyabamma","10:00","11:00"],
+    ["MAT", "Maths", "Satyabamma", "10:00", "11:00"],
 
-["SOC","Social Science","Sujatha","11:00","12:00"],
+    ["SOC", "Social Science", "Sujatha", "11:15", "12:15"],
 
-["TEL","Telugu","Helen","12:00","13:00"],
+    ["TEL", "Telugu", "Helen", "13:00", "14:00"],
 
-["SCI","Science","Sheela","14:00","15:00"],
+    ["SCI", "Science", "Sheela", "14:00", "15:00"],
 
-["IT","IT (Optional)","Sathia","15:00","16:00"]
+    ["IT", "IT (Optional)", "Sathia", "15:00", "16:00"]
 
 ];
 
@@ -621,22 +678,41 @@ status:"Present"
    SCHOOL DATA
 ===================================== */
 
+/* =====================================
+   OPEN SCHOOL STUDENTS ONLY
+===================================== */
+
+const schoolNames = [
+
+    "Sashikala",
+    "Chandana",
+    "P.Anusha",
+    "Y.Shruthi",
+    "Pochamma"
+
+];
+
+
+/* =====================================
+   OPEN SCHOOL DATA
+===================================== */
+
 const schoolStudents =
-names.map(name => ({
+schoolNames.map(name => ({
 
-name:name,
+    name: name,
 
-items:Object.fromEntries(
+    items: Object.fromEntries(
 
-schoolSubjects.map(subject => [
+        schoolSubjects.map(subject => [
 
-subject[0],
+            subject[0],
 
-"Present"
+            "Present"
 
-])
+        ])
 
-)
+    )
 
 }));
 
@@ -820,102 +896,115 @@ renderTherapy();
 
 function renderSchool(){
 
-const root =
-document.getElementById(
-"schoolStudents"
-);
+    const root =
+        document.getElementById("schoolStudents");
 
-root.innerHTML = "";
+    root.innerHTML = "";
 
+    schoolStudents.forEach((student, sIndex) => {
 
-schoolStudents.forEach(
-(student,sIndex)=>{
+        let html = `
+        <div class="student">
 
-let html = `
-<div class="student">
+            <h3>
+                ${student.name}
+            </h3>
+        `;
 
-<h3>
-${student.name}
-</h3>
-`;
+        schoolSubjects.forEach((subject, index) => {
 
+            const code = subject[0];
+            const subjectName = subject[1];
+            const teacher = subject[2];
+            const start = subject[3];
+            const end = subject[4];
 
-schoolSubjects.forEach(
-subject=>{
+            const status = student.items[code];
 
-const code =
-subject[0];
+            /* RECESS AFTER PERIOD 2 */
 
-const subjectName =
-subject[1];
+            if(index === 2){
 
-const teacher =
-subject[2];
+                html += `
 
-const start =
-subject[3];
+                <div class="student-break">
+                    ☕ Recess<br>
+                    <small>11:00 – 11:15</small>
+                </div>
 
-const end =
-subject[4];
+                `;
 
-const status =
-student.items[code];
+            }
 
+            /* LUNCH BEFORE TELUGU */
 
-html += `
+            if(index === 3){
 
-<div class="row">
+                html += `
 
-<div class="code">
+                <div class="student-lunch">
+                    🍱 Lunch Break<br>
+                    <small>12:15 – 1:00</small>
+                </div>
 
-${start}<br>
-${end}
+                `;
 
-</div>
+            }
 
-<div>
+            html += `
 
-<div class="teacher">
+            <div class="row">
 
-<b>
-${subjectName}
-</b>
+                <div class="code">
 
-</div>
+                    ${start}<br>
+                    ${end}
 
-<div class="teacher">
+                </div>
 
-${teacher}
+                <div>
 
-</div>
+                    <div class="teacher">
 
-</div>
+                        <b>
+                            ${subjectName}
+                        </b>
 
-<div
-class="status
-${status.toLowerCase()}"
-onclick="
-changeSchoolStatus(
-${sIndex},
-'${code}'
-)
-">
+                    </div>
 
-${status}
+                    <div class="teacher">
 
-</div>
+                        ${teacher}
 
-</div>
+                    </div>
 
-`;
+                </div>
 
-});
+                <div
+                    class="status ${status.toLowerCase()}"
+                    onclick="
+                        changeSchoolStatus(
+                            ${sIndex},
+                            '${code}'
+                        )
+                    "
+                >
 
-html += `</div>`;
+                    ${status}
 
-root.innerHTML += html;
+                </div>
 
-});
+            </div>
+
+            `;
+
+        });
+
+        html += `</div>`;
+
+        root.innerHTML += html;
+
+    });
 
 }
 
