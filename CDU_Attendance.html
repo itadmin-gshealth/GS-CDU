@@ -1,0 +1,855 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Student Attendance Register</title>
+
+<style>
+*{
+    box-sizing:border-box;
+}
+
+body{
+    margin:0;
+    font-family:Arial,Helvetica,sans-serif;
+    background:#f2f5f9;
+    color:#222;
+}
+
+.container{
+    max-width:1200px;
+    margin:auto;
+    padding:15px;
+}
+
+h1{
+    text-align:center;
+    color:#1565C0;
+    margin-bottom:5px;
+}
+
+h2{
+    color:#1565C0;
+}
+
+.card{
+    background:#fff;
+    border-radius:12px;
+    padding:15px;
+    margin-bottom:15px;
+    box-shadow:0 2px 8px rgba(0,0,0,.08);
+}
+
+/* DATE */
+.date-box{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    flex-wrap:wrap;
+}
+
+input[type=date]{
+    padding:10px;
+    border:1px solid #ccc;
+    border-radius:8px;
+    font-size:16px;
+}
+
+/* TOGGLE */
+.toggle{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:10px;
+    margin:15px 0;
+}
+
+.toggle button{
+    padding:15px;
+    border:none;
+    border-radius:10px;
+    font-size:16px;
+    font-weight:bold;
+    cursor:pointer;
+    background:#dbeafe;
+    color:#1565C0;
+}
+
+.toggle button.active{
+    background:#1565C0;
+    color:white;
+}
+
+/* STUDENTS */
+#therapyStudents,
+#schoolStudents{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:15px;
+}
+
+.student{
+    background:white;
+    border-radius:12px;
+    padding:12px;
+    box-shadow:0 2px 8px rgba(0,0,0,.08);
+}
+
+.student h3{
+    margin:0 0 12px;
+    padding-bottom:8px;
+    border-bottom:1px solid #eee;
+    color:#0f172a;
+}
+
+/* ROW */
+.row{
+    display:grid;
+    grid-template-columns:70px 1fr 100px;
+    gap:8px;
+    align-items:center;
+    margin-bottom:9px;
+}
+
+.code{
+    font-weight:bold;
+    color:#1565C0;
+    font-size:13px;
+}
+
+.teacher{
+    font-size:13px;
+    color:#555;
+}
+
+/* TIME */
+input[type=time]{
+    width:100%;
+    padding:8px;
+    border:1px solid #ccc;
+    border-radius:7px;
+}
+
+/* STATUS */
+.status{
+    text-align:center;
+    padding:11px 5px;
+    border-radius:25px;
+    color:white;
+    font-weight:bold;
+    cursor:pointer;
+    user-select:none;
+    font-size:13px;
+}
+
+.status:active{
+    transform:scale(.95);
+}
+
+.present{
+    background:#2E7D32;
+}
+
+.absent{
+    background:#D32F2F;
+}
+
+.late{
+    background:#F57C00;
+}
+
+/* HIDE */
+.hidden{
+    display:none;
+}
+
+/* SUBMIT */
+.submit-area{
+    margin-top:20px;
+}
+
+.submit-btn{
+    width:100%;
+    padding:16px;
+    background:#1565C0;
+    color:white;
+    border:none;
+    border-radius:10px;
+    font-size:17px;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+.submit-btn:active{
+    transform:scale(.98);
+}
+
+.submit-btn:disabled{
+    background:#999;
+    cursor:not-allowed;
+}
+
+/* MESSAGE */
+#message{
+    display:none;
+    margin-top:12px;
+    padding:12px;
+    border-radius:8px;
+    text-align:center;
+    font-weight:bold;
+}
+
+.success{
+    background:#E8F5E9;
+    color:#2E7D32;
+}
+
+.error{
+    background:#FFEBEE;
+    color:#C62828;
+}
+
+/* MOBILE */
+@media(max-width:768px){
+
+    #therapyStudents,
+    #schoolStudents{
+        grid-template-columns:1fr;
+    }
+
+    .row{
+        grid-template-columns:60px 1fr 85px;
+    }
+
+    .status{
+        font-size:12px;
+        padding:10px 3px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<h1>Student Attendance Register</h1>
+
+<!-- DATE -->
+<div class="card">
+
+<div class="date-box">
+
+<label><b>Attendance Date</b></label>
+
+<input type="date" id="date">
+
+</div>
+
+</div>
+
+
+<!-- TOGGLE -->
+<div class="toggle">
+
+<button
+id="therapyBtn"
+class="active"
+onclick="showSection('therapy')">
+Therapy Sessions
+</button>
+
+<button
+id="schoolBtn"
+onclick="showSection('school')">
+Open School
+</button>
+
+</div>
+
+
+<!-- THERAPY -->
+<div id="therapySection">
+
+<h2>Therapy Attendance</h2>
+
+<div id="therapyStudents"></div>
+
+</div>
+
+
+<!-- OPEN SCHOOL -->
+<div id="schoolSection" class="hidden">
+
+<h2>Open School Attendance</h2>
+
+<div id="schoolStudents"></div>
+
+</div>
+
+
+<!-- SUBMIT -->
+<div class="submit-area">
+
+<button
+id="submitBtn"
+class="submit-btn"
+onclick="submitAttendance()">
+
+Submit Attendance
+
+</button>
+
+<div id="message"></div>
+
+</div>
+
+</div>
+
+
+<script>
+
+/* --------------------------------
+   DATE
+-------------------------------- */
+
+document.getElementById("date").value =
+new Date().toISOString().split("T")[0];
+
+
+/* --------------------------------
+   STATUS
+-------------------------------- */
+
+const statusOrder = [
+    "Present",
+    "Absent",
+    "Late"
+];
+
+
+/* --------------------------------
+   THERAPY SUBJECTS
+-------------------------------- */
+
+const therapySubjects = [
+
+    ["OT","Occupational Therapy"],
+
+    ["BT","Behaviour Therapy"],
+
+    ["SP ED","Special Education"],
+
+    ["ST","Speech Therapy"]
+
+];
+
+
+/* --------------------------------
+   OPEN SCHOOL SUBJECTS
+-------------------------------- */
+
+const schoolSubjects = [
+
+    ["ENG","English","Joy Emmanuel"],
+
+    ["MAT","Maths","Satyabamma"],
+
+    ["SOC","Social Science","Sujatha"],
+
+    ["TEL","Telugu","Helen"],
+
+    ["SCI","Science","Sheela"],
+
+    ["IT","IT (Optional)","Sathia"]
+
+];
+
+
+/* --------------------------------
+   STUDENTS
+-------------------------------- */
+
+const names = [
+
+    "Jeremy",
+    "Likith",
+    "Sai Sandeep",
+    "Diya",
+    "Kavya",
+    "Meera",
+    "Aarav",
+    "Ishaan"
+
+];
+
+
+/* --------------------------------
+   THERAPY DATA
+-------------------------------- */
+
+const therapyStudents = names.map(name => ({
+
+    name:name,
+
+    items:Object.fromEntries(
+
+        therapySubjects.map(subject => [
+
+            subject[0],
+
+            {
+                time:"09:00",
+                status:"Present"
+            }
+
+        ])
+
+    )
+
+}));
+
+
+/* --------------------------------
+   SCHOOL DATA
+-------------------------------- */
+
+const schoolStudents = names.map(name => ({
+
+    name:name,
+
+    items:Object.fromEntries(
+
+        schoolSubjects.map(subject => [
+
+            subject[0],
+
+            "Present"
+
+        ])
+
+    )
+
+}));
+
+
+/* --------------------------------
+   TOGGLE
+-------------------------------- */
+
+function showSection(type){
+
+    document
+    .getElementById("therapySection")
+    .classList
+    .toggle("hidden",type !== "therapy");
+
+    document
+    .getElementById("schoolSection")
+    .classList
+    .toggle("hidden",type !== "school");
+
+    document
+    .getElementById("therapyBtn")
+    .classList
+    .toggle("active",type === "therapy");
+
+    document
+    .getElementById("schoolBtn")
+    .classList
+    .toggle("active",type === "school");
+
+}
+
+
+/* --------------------------------
+   STATUS CYCLE
+-------------------------------- */
+
+function cycleStatus(current){
+
+    const index =
+        statusOrder.indexOf(current);
+
+    return statusOrder[
+        (index + 1) % statusOrder.length
+    ];
+
+}
+
+
+/* --------------------------------
+   RENDER THERAPY
+-------------------------------- */
+
+function renderTherapy(){
+
+    const root =
+        document.getElementById("therapyStudents");
+
+    root.innerHTML = "";
+
+    therapyStudents.forEach((student,sIndex)=>{
+
+        let html = `
+        <div class="student">
+
+            <h3>${student.name}</h3>
+        `;
+
+        therapySubjects.forEach(subject=>{
+
+            const code = subject[0];
+
+            const data =
+                student.items[code];
+
+            html += `
+
+            <div class="row">
+
+                <div class="code">
+                    ${code}
+                </div>
+
+                <div>
+
+                    <div class="teacher">
+                        ${subject[1]}
+                    </div>
+
+                    <input
+                        type="time"
+                        value="${data.time}"
+                        onchange="
+                        therapyStudents[
+                            ${sIndex}
+                        ].items['${code}'].time=this.value
+                        "
+                    >
+
+                </div>
+
+                <div
+                    class="status ${data.status.toLowerCase()}"
+                    onclick="
+                    changeTherapyStatus(
+                        ${sIndex},
+                        '${code}'
+                    )
+                    "
+                >
+                    ${data.status}
+                </div>
+
+            </div>
+
+            `;
+
+        });
+
+        html += `</div>`;
+
+        root.innerHTML += html;
+
+    });
+
+}
+
+
+/* --------------------------------
+   CHANGE THERAPY STATUS
+-------------------------------- */
+
+function changeTherapyStatus(student,subject){
+
+    const current =
+        therapyStudents[student]
+        .items[subject]
+        .status;
+
+    therapyStudents[student]
+    .items[subject]
+    .status =
+        cycleStatus(current);
+
+    renderTherapy();
+
+}
+
+
+/* --------------------------------
+   RENDER SCHOOL
+-------------------------------- */
+
+function renderSchool(){
+
+    const root =
+        document.getElementById("schoolStudents");
+
+    root.innerHTML = "";
+
+    schoolStudents.forEach((student,sIndex)=>{
+
+        let html = `
+        <div class="student">
+
+            <h3>${student.name}</h3>
+        `;
+
+        schoolSubjects.forEach(subject=>{
+
+            const code = subject[0];
+
+            const subjectName = subject[1];
+
+            const teacher = subject[2];
+
+            const status =
+                student.items[code];
+
+            html += `
+
+            <div class="row">
+
+                <div class="code">
+                    ${code}
+                </div>
+
+                <div>
+
+                    <div class="teacher">
+                        <b>${subjectName}</b>
+                    </div>
+
+                    <div class="teacher">
+                        ${teacher}
+                    </div>
+
+                </div>
+
+                <div
+                    class="status ${status.toLowerCase()}"
+                    onclick="
+                    changeSchoolStatus(
+                        ${sIndex},
+                        '${code}'
+                    )
+                    "
+                >
+                    ${status}
+                </div>
+
+            </div>
+
+            `;
+
+        });
+
+        html += `</div>`;
+
+        root.innerHTML += html;
+
+    });
+
+}
+
+
+/* --------------------------------
+   CHANGE SCHOOL STATUS
+-------------------------------- */
+
+function changeSchoolStatus(student,subject){
+
+    const current =
+        schoolStudents[student]
+        .items[subject];
+
+    schoolStudents[student]
+    .items[subject] =
+        cycleStatus(current);
+
+    renderSchool();
+
+}
+
+
+/* --------------------------------
+   SUBMIT TO N8N
+-------------------------------- */
+
+async function submitAttendance(){
+
+    const button =
+        document.getElementById("submitBtn");
+
+    const message =
+        document.getElementById("message");
+
+    const date =
+        document.getElementById("date").value;
+
+
+    if(!date){
+
+        showMessage(
+            "Please select the attendance date.",
+            "error"
+        );
+
+        return;
+
+    }
+
+
+    /* --------------------------------
+       CHANGE THIS URL
+    -------------------------------- */
+
+    const N8N_WEBHOOK_URL =
+        "https://goodshepherdhealth.app.n8n.cloud/webhook/CDU-Attendance-Tracker";
+
+
+    /* --------------------------------
+       DETERMINE ACTIVE REGISTER
+    -------------------------------- */
+
+    const therapyVisible =
+        !document
+        .getElementById("therapySection")
+        .classList
+        .contains("hidden");
+
+
+    const register =
+        therapyVisible
+        ? "therapy"
+        : "open_school";
+
+
+    /* --------------------------------
+       PREPARE DATA
+    -------------------------------- */
+
+    const payload = {
+
+        date:date,
+
+        register:register,
+
+        submitted_at:
+            new Date().toISOString(),
+
+        students:
+            therapyVisible
+            ? therapyStudents
+            : schoolStudents
+
+    };
+
+
+    console.log(
+        "Sending to n8n:",
+        payload
+    );
+
+
+    /* --------------------------------
+       BUTTON STATE
+    -------------------------------- */
+
+    button.disabled = true;
+
+    button.textContent =
+        "Sending...";
+
+
+    try{
+
+        const response =
+            await fetch(
+                N8N_WEBHOOK_URL,
+                {
+
+                    method:"POST",
+
+                    headers:{
+                        "Content-Type":
+                        "application/json"
+                    },
+
+                    body:
+                        JSON.stringify(payload)
+
+                }
+            );
+
+
+        if(!response.ok){
+
+            throw new Error(
+                "Server returned " +
+                response.status
+            );
+
+        }
+
+
+        showMessage(
+            "✓ Attendance submitted successfully.",
+            "success"
+        );
+
+
+    }
+    catch(error){
+
+        console.error(error);
+
+        showMessage(
+            "✗ Unable to submit attendance. Please check your connection.",
+            "error"
+        );
+
+    }
+
+
+    button.disabled = false;
+
+    button.textContent =
+        "Submit Attendance";
+
+}
+
+
+/* --------------------------------
+   MESSAGE
+-------------------------------- */
+
+function showMessage(text,type){
+
+    const message =
+        document.getElementById("message");
+
+    message.textContent = text;
+
+    message.className = type;
+
+    message.style.display =
+        "block";
+
+}
+
+
+/* --------------------------------
+   INITIAL RENDER
+-------------------------------- */
+
+renderTherapy();
+
+renderSchool();
+
+</script>
+
+</body>
+</html>
